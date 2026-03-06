@@ -1,0 +1,29 @@
+sequenceDiagram
+    participant C as Client
+    participant DSS as DesktopSecureStorage
+    participant Cache as In-Memory Cache
+    participant AES as AES-256-GCM
+    participant FS as File System
+
+    C->>DSS: store(key, value)
+    DSS->>DSS: mutex.withLock
+    DSS->>FS: ensureStorageDirectory()
+    DSS->>FS: getOrCreateSecretKey()
+    DSS->>AES: encryptData(value, secretKey)
+    AES-->>DSS: base64(iv + ciphertext)
+    DSS->>Cache: update cache[key]
+    DSS->>FS: persistToFile(data)
+    DSS-->>C: Result.success(Unit)
+
+    C->>DSS: retrieve(key)
+    DSS->>DSS: mutex.withLock
+    DSS->>Cache: check modification time
+    alt Cache valid
+        Cache-->>DSS: cached encrypted value
+    else Cache stale
+        DSS->>FS: readEncryptedData()
+        FS-->>DSS: encrypted entries
+    end
+    DSS->>AES: decryptData(encrypted, secretKey)
+    AES-->>DSS: plaintext value
+    DSS-->>C: Result.success(value)

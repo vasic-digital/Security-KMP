@@ -1,0 +1,31 @@
+graph TB
+    subgraph "Security-KMP"
+        SI[SecureStorage Interface]
+        SF[SecureStorageFactory]
+
+        subgraph "Desktop"
+            DS[DesktopSecureStorage]
+            AES[AES-256-GCM]
+            FS[File System<br>.storage_key + .secure_storage]
+        end
+
+        subgraph "Android"
+            AS[InMemorySecureStorage<br>stub]
+        end
+
+        subgraph "iOS"
+            IS[IosInMemorySecureStorage<br>stub]
+        end
+
+        subgraph "Wasm"
+            WS[WasmInMemorySecureStorage<br>stub]
+        end
+    end
+
+    SF -->|create| SI
+    SI -->|implements| DS
+    SI -->|implements| AS
+    SI -->|implements| IS
+    SI -->|implements| WS
+    DS --> AES
+    AES --> FS
