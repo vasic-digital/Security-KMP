@@ -12,4 +12,4 @@ testing = ["kotlin-test", "kotlinx-coroutines-test"]
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-android-library = { id = "com.android.library", version = "8.2.2" }
+android-library = { id = "com.android.library", version = "8.9.0" }
