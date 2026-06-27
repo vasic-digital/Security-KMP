@@ -9,16 +9,16 @@ version = "1.0.0"
 kotlin {
     androidTarget {
         compilations.all {
-            kotlinOptions {
-                jvmTarget = "11"
+            compilerOptions.configure {
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
             }
         }
     }
 
     jvm("desktop") {
         compilations.all {
-            kotlinOptions {
-                jvmTarget = "11"
+            compilerOptions.configure {
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
             }
         }
     }
